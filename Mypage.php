@@ -3,7 +3,7 @@
 	<?php
 		session_start();	
 		if(!isset($_SESSION['username'])) {
-			header("Location:Login.php");
+			header("Location:login.php");
 			exit;
 		}
 		$username = $_SESSION['username'];
@@ -58,31 +58,36 @@
 
 		<div id="content">
 				<?php
-					if ($usertype == "Student") {
+					if ($usertype == "student") {
 				?>
 				<table style="table-layout: fixed">
 				<tr>
-					<th>Subject</th><th>Year-Semester</th><th>Grade</th><th>Evaluation Contents</th>
+					<th>Subject</th><th>Year-Semester</th><th>Grade</th><th>Evaluation</th>
 				</tr>
-				<?php
-						$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-						or die ('could not connext : '. pg_last_error());
+				<?php  
+				
+						$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
+
 						$query = "SELECT title, semester, year, grade, post_string, score_pro, score_ama, professor_name
 									FROM (student join takes using(student_id)) join post using(post_id) join course using(course_id)
 									join professor using(professor_id)
-									WHERE student.student_name like '$username';"; 
-						$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-						$row_numbers = pg_num_rows($result);
-						if($row_numbers) {
-							for($i=0; $i<$row_numbers; $i++) {
-								$title = pg_fetch_result($result, $i, 0);
-								$semester = pg_fetch_result($result, $i, 1);
-								$year = pg_fetch_result($result, $i, 2);
-								$grade = pg_fetch_result($result, $i, 3);
-								$post_string = pg_fetch_result($result, $i, 4);
-								$score_pro = pg_fetch_result($result, $i, 5);
-								$score_ama = pg_fetch_result($result, $i, 6);
-								$professor_name = pg_fetch_result($result, $i, 7);
+									WHERE student.student_name like '$username'"; 
+						
+						$result = mysqli_query($db,$query);
+						if(count($result)) 
+						{
+							printf("%d\n",count($result));
+							while($row = mysqli_fetch_assoc($result))
+							{
+								print("wow\n");
+								$title = $row['title'];
+								$semester = $row['semester'];
+								$year = $row['year'];
+								$grade = $row['grade'];
+								$post_string = $row['post_string'];
+								$score_pro = $row['score_pro'];
+								$score_ama = $row['score_ama'];
+								$professor_name = $row['professor_name'];
 	
 								print "<tr><td>$title</td><td>$year"."-"."$semester</td><td>$grade</td>"?>
 								<td style="word-break; break-all">
@@ -109,27 +114,28 @@
 					}
 					?>
 			<?php
-				if ($usertype == "교수") {
+				if ($usertype == "professor") {
 			?>
 			<table>
 				<tr>
-					<th>Subject</th><th>Go To Report Card</th>
+					<th>Subject</th><th>Evaluation</th>
 				</tr>
 			<?php
-					$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-					or die ('could not connext : '. pg_last_error());
+					$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
 					$query = "SELECT distinct title, semester, year, score_pro, score_ama
 								FROM (professor join course using(professor_id)) join takes using(course_id) join post using(post_id) join student using(student_id)
 								WHERE professor.professor_name like '$username';"; 
-					$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-					$row_numbers = pg_num_rows($result);
+					$result = mysqli_query($db,$query) or die ('Query failed: '. mysqli_error());
+					$row_numbers = mysqli_num_rows($result);
 					if($row_numbers) {
-						for($i=0; $i<$row_numbers; $i++) {
-							$title = pg_fetch_result($result, $i, 0);
-							$semester = pg_fetch_result($result, $i, 1);
-							$year = pg_fetch_result($result, $i, 2);
-							$score_pro = pg_fetch_result($result, $i, 3);
-							$score_ama = pg_fetch_result($result, $i, 4);
+						//for($i=0; $i<$row_numbers; $i++) 
+						while($row=mysqli_fetch_assoc($result))
+						{
+							$title = $row[title];
+							$semester = $row[semester];
+							$year = $row[year];
+							$score_pro = $row[score_pro];
+							$score_ama = $row[score_ama];
 
 							print "<tr><td>$title</td>";
 							?>
@@ -141,7 +147,7 @@
 								<input type="hidden" name="year" value="<?php echo $year?>"/>
 								<input type="hidden" name="semester" value="<?php echo $semester?>"/>
 								<td>
-								<button type="submit">Go to Report Card</button>
+								<button type="submit">Evaluation</button>
 								</td></tr>
 							</form>
 							<?php
@@ -151,16 +157,16 @@
 			?>
 			</table>
 			<?php
-				if ($usertype == "관리") {
+				if ($usertype == "administer") {
 			?>
 				<div style = "width:300px";>
 					<form action = "Administer.php" method = "get">
 						<fieldset style = "text-align: left;">
-							<legend><strong>학과 추가</strong></legend>
-							학과이름 : <input type="text" name="dept_name"/> <br>
-							학과건물 : <input type="text" name="building"/> <br>
+							<legend><strong>Add Department</strong></legend>
+							Department Name : <input type="text" name="dept_name"/> <br>
+							Department Building : <input type="text" name="building"/> <br>
 							<input type="hidden" name="addtype" value=0>
-							<button type="submit">추가</button>
+							<button type="submit">Addition</button>
 						</fieldset>
 					</form>
 				</div>
@@ -168,19 +174,20 @@
 				<div style = "width:300px";>
 					<form action = "Administer.php" method = "get">
 						<fieldset style = "text-align: left;">
-							<legend><strong>학생 추가</strong></legend>
-							학생이름 : <input type="text" name="usersname"/> <br>
-							학과이름 :
+							<legend><strong>Add Students</strong></legend>
+							Name : <input type="text" name="usersname"/> <br>
+							Department :
 							<select name="deptname">
 								<?php
-									$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-									or die ('could not connext : '. pg_last_error());
+									$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
 									$query = "SELECT dept_name from department;"; 
-									$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-									$row_numbers = pg_num_rows($result);
+									$result = mysqli_query($db,$query) or die ('Query failed: '. mysqli_error());
+									$row_numbers = mysqli_num_rows($result);
 									if($row_numbers) {
-										for ($i=0; $i<$row_numbers; $i++) {
-											$dept = pg_fetch_result($result, $i, 0);
+										//for ($i=0; $i<$row_numbers; $i++) 
+										while($row=mysqli_fetch_assoc($result))
+										{
+											$dept = $row[dept_name];
 											echo "<option value='$dept'>$dept</option>";
 										}
 									}
@@ -188,26 +195,27 @@
 							</select>
 							<br>
 							<input type="hidden" name="addtype" value=1>
-							<button type="submit">추가</button>
+							<button type="submit">Add</button>
 						</fieldset>
 					</form>
 				</div>
 				<div style = "width:300px";>
 					<form action = "Administer.php" method = "get">
 						<fieldset style = "text-align: left;">
-							<legend><strong>교수 추가</strong></legend>
-							교수이름 : <input type="text" name="profname"/> <br>
-							학과이름 :
+							<legend><strong>Add Professor</strong></legend>
+							Name : <input type="text" name="profname"/> <br>
+							Department :
 							<select name="deptname">
 								<?php
-									$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-									or die ('could not connext : '. pg_last_error());
+									$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
 									$query = "SELECT dept_name from department;"; 
-									$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-									$row_numbers = pg_num_rows($result);
+									$result = mysqli_query($db,$query) or die ('Query failed: '. mysqli_error());
+									$row_numbers = mysqli_num_rows($result);
 									if($row_numbers) {
-										for ($i=0; $i<$row_numbers; $i++) {
-											$dept = pg_fetch_result($result, $i, 0);
+										//for ($i=0; $i<$row_numbers; $i++) 
+										while($row=mysqli_fetch_assoc($result))
+										{
+											$dept = $row[dept_name];
 											echo "<option value='$dept'>$dept</option>";
 										}
 									}
@@ -215,7 +223,7 @@
 							</select>
 							<br>
 							<input type="hidden" name="addtype" value=2>
-							<button type="submit">추가</button>
+							<button type="submit">Add</button>
 						</fieldset>
 					</form>
 				</div>
@@ -223,61 +231,62 @@
 				<div style = "width:300px";>
 					<form action = "Administer.php" method = "get">
 						<fieldset style = "text-align: left;">
-							<legend><strong>과목 추가</strong></legend>
-							학과이름 :
+							<legend><strong>Add Subject</strong></legend>
+							Department :
 							<select name="deptname">
 								<?php
-									$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-									or die ('could not connext : '. pg_last_error());
+									$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
 									$query = "SELECT dept_name from department;"; 
-									$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-									$row_numbers = pg_num_rows($result);
+									$result = mysqli_query($db,$query) or die ('Query failed: '. mysqli_error());
+									$row_numbers = mysqli_num_rows($result);
 									if($row_numbers) {
-										for ($i=0; $i<$row_numbers; $i++) {
-											$dept = pg_fetch_result($result, $i, 0);
+										//for ($i=0; $i<$row_numbers; $i++) 
+										while($row=mysqli_fetch_assoc($result))
+										{
+											$dept = $row[dept_name];
 											echo "<option value='$dept'>$dept</option>";
 										}
 									}
 								?>
 							</select>
 							<br>
-							교수이름 : 
+							Professor Name : 
 							<select name="professor_id">
 								<?php
-									$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-									or die ('could not connext : '. pg_last_error());
+									$db = mysqli_connect("0.0.0.0","hwaneeee","","c9");
 									$query = "SELECT professor_id, professor_name from professor order by professor_name;"; 
-									$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-									$row_numbers = pg_num_rows($result);
-									
-									if($row_numbers) {	
-										for ($i=0; $i<$row_numbers; $i++) {
-											$prof_id = pg_fetch_result($result, $i, 0);
-											$prof_name = pg_fetch_result($result, $i, 1);
+									$result = mysqli_query($db,$query) or die ('Query failed: '. mysqli_error());
+									$row_numbers = mysqli_num_rows($result);
+									if($row_numbers) {
+										//for ($i=0; $i<$row_numbers; $i++) 
+										while($row=mysqli_fetch_assoc($result))
+										{
+											$prof_id = $row[professor_id];
+											$prof_name = $row[professor_name];
 											echo "<option value='$prof_id'>$prof_name</option>";
 										}
 									}
 								?>
 							</select>
 							<br>
-							과목이름 : <input type="text" name="title"/> <br>
-							학점 : 
+							Subject : <input type="text" name="title"/> <br>
+							Grade : 
 							<select name="credit">
 								<option value='1'>1</option>
 								<option value='2'>2</option>
 								<option value='3'>3</option>
 							</select>
 							<br>
-							최대수용인원 : <input type="range" name="max_number" min=40 max=100> <br>
-							유형 :
+							Available : <input type="range" name="max_number" min=40 max=100> <br>
+							Type :
 							<select name="coursetype">
-								<option value='전공'>전공</option>
-								<option value='교양'>교양</option>
+								<option value='major'>major</option>
+								<option value='liberal arts'>liberal arts</option>
 							</select>
 							<br>
 	
 							<input type="hidden" name="addtype" value=3>
-							<button type="submit">추가</button>
+							<button type="submit">Add</button>
 						</fieldset>
 					</form>
 				</div>

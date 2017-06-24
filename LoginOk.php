@@ -3,7 +3,7 @@
 	<?php
 		include("Connect.php");
 		session_start();
-
+		
 		if(!isset($_POST['Username'])) exit;
 		
 		$IDname = $_POST['Username'];
@@ -35,6 +35,6 @@
 		session_start();
 		$_SESSION['username'] = $IDname;
 		$_SESSION['usertype'] = $usertype;
-		header ("Location:DB_test.php");
+		 header ("Location:DB_test.php");
 	?>
 </html>
