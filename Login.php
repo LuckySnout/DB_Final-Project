@@ -5,7 +5,7 @@
     </head>
     <body>
         <div style = "width:200px";>
-			<form action = "login_ok.php" method = "post">
+			<form action = "LoginOk.php" method = "post">
 				<fieldset style = "text-align: left;">
 					<legend><strong>LOGIN PAGE</strong></legend>
 					USER NAME: <input type="text" name="Username"/>
