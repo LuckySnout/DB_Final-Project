@@ -19,16 +19,5 @@
     } 
     echo "Connected successfully (".$db->host_info.")";
     
-    $sql = "insert into department values ('Comp. Sci', 'Woojung')"; 
-    
-    if($db->query($sql)===TRUE)
-    {
-        echo "Record created Succesfsfully";
-    }
-    else
-    {
-        echo "Error : " . $sql . "<br>" . $db->error;   
-    }
-    
     $db->close();
 ?>
