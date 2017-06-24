@@ -1,26 +1,40 @@
-<?php
-if(!isset($_POST['Username'])) exit;
-		$username = $_POST['Username'];
-		$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
-		or die ('could not connext : '. pg_last_error());
-		$query = "select user_name, user_type from users";
-		$result = pg_query($query) or die ('Query failed: '. pg_last_error());
-		$all_data = pg_fetch_all($result);
+<!DOCTYPE html>
+<html>
+	<?php
+		include("Connect.php");
+		session_start();
+
+		if(!isset($_POST['Username'])) exit;
+		
+		$IDname = $_POST['Username'];
+		$query = "SELECT * FROM users WHERE user_name = '$IDname'";
+		$result = mysqli_query($db,$query);
+
+		//$all_data = mysqli_fetch_all($result);
+		//printf("%d\n",count($all_data));
+		//printf("%s\n",$IDname);
+		
+		//printf("%d\n",!$row);
+		
 		$check = 0;
-		$type_check = 0;
-		for($i=0; $i < count($all_data); $i++) {
-			$data = pg_fetch_result($result, $i, 0);
-			if ($data == $username) {
+		while($row = mysqli_fetch_assoc($result))
+		{
+			printf("Wow\n");
+			printf("%d",$check);
+			if($row['user_name']==$IDname)
+			{
 				$check++;
-				$usertype = pg_fetch_result($result, $i, 1);
+				$IDname = $row['user_name'];
+				$usertype = $row['user_type'];
 			}
 		}
 		if ($check == 0) {
-			echo "<script>alert('ID DOES NOT EXIST! TRY IT AGAIN!');document.location.href='Login.html';</script>";
+			echo "<script>alert('ID DOES NOT EXIST! TRY IT AGAIN!');document.location.href='Login.php';</script>";
 			exit;
 		}
 		session_start();
-		$_SESSION['username'] = $username;
+		$_SESSION['username'] = $IDname;
 		$_SESSION['usertype'] = $usertype;
-		header ("Location:db_test.php");
-?>
+		header ("Location:DB_test.php");
+	?>
+</html>

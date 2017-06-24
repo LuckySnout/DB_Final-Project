@@ -16,9 +16,9 @@
 		<div id="sidebar">
 			<a style="font-size:25pt; font-style:bold"><?php echo $_SESSION['username']."(".$_SESSION['usertype'].")"?></a>
 			<ul>
-				<p><a href = 'Logout.php' style="font-size:15pt; font-style:bold">로그아웃</a></p>
-				<p><a href = 'MyPage.php' style="font-size:15pt; font-style:bold">마이페이지</a></p>
-				<p><a href = 'DB_test.php' style="font-size:15pt; font-style:bold">검색</a></p>
+				<p><a href = 'Logout.php' style="font-size:15pt; font-style:bold">Logout</a></p>
+				<p><a href = 'Mypage.php' style="font-size:15pt; font-style:bold">Mypage</a></p>
+				<p><a href = 'DB_test.php' style="font-size:15pt; font-style:bold">Searching</a></p>
 			</ul>
 		</div>
 	</body>

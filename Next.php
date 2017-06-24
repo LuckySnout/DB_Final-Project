@@ -3,7 +3,7 @@
 	<?php
 		session_start();	
 		if(!isset($_SESSION['username'])) {
-			header("Location:Login.php");
+			header("Location:login.php");
 			exit;
 		}
 		$username = $_SESSION['username'];
@@ -54,15 +54,15 @@
 		</title>
 	</head>
 	<body>
-		<?php include("Header.php"); ?>
+		<?php include("header.php"); ?>
 
 		<div id="content">
 				<?php
-					if ($usertype == "Student") {
+					if ($usertype == "학생") {
 				?>
 				<table style="table-layout: fixed">
 				<tr>
-					<th>Subject</th><th>Year-Semester</th><th>Grade</th><th>Evaluation Contents</th>
+					<th>과목명</th><th>연도-학기</th><th>학점</th><th>평가 내용</th>
 				</tr>
 				<?php
 						$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
@@ -88,7 +88,7 @@
 								<td style="word-break; break-all">
 								<?php echo "$post_string</td><td>";
 								?>
-								<form action = "Score.php" method = "get">
+								<form action = "score.php" method = "get">
 									<input type="hidden" name="profname" value="<?php echo $professor_name?>"/>
 									<input type="hidden" name="title" value="<?php echo $title?>"/>
 									<input type="hidden" name="score_pro" value="<?php echo $score_pro?>"/>
@@ -96,7 +96,7 @@
 									<input type="hidden" name="year" value="<?php echo $year?>"/>
 									<input type="hidden" name="semester" value="<?php echo $semester?>"/>
 			
-									<button type="submit">Evaluation</button>
+									<button type="submit">평가</button>
 								</td></tr>
 								</form>
 	
@@ -113,7 +113,7 @@
 			?>
 			<table>
 				<tr>
-					<th>Subject</th><th>Go To Report Card</th>
+					<th>과목명</th><th>평가보기</th>
 				</tr>
 			<?php
 					$dbconn = pg_connect("host=localhost dbname=postgres user=postgres password=ghkstkd1")
@@ -133,7 +133,7 @@
 
 							print "<tr><td>$title</td>";
 							?>
-							<form action = "Score.php" method = "get">
+							<form action = "score.php" method = "get">
 								<input type="hidden" name="profname" value="<?php echo $username?>"/>
 								<input type="hidden" name="title" value="<?php echo $title?>"/>
 								<input type="hidden" name="score_pro" value="<?php echo $score_pro?>"/>
@@ -141,7 +141,7 @@
 								<input type="hidden" name="year" value="<?php echo $year?>"/>
 								<input type="hidden" name="semester" value="<?php echo $semester?>"/>
 								<td>
-								<button type="submit">Go to Report Card</button>
+								<button type="submit">평가보기</button>
 								</td></tr>
 							</form>
 							<?php
@@ -154,7 +154,7 @@
 				if ($usertype == "관리") {
 			?>
 				<div style = "width:300px";>
-					<form action = "Administer.php" method = "get">
+					<form action = "administer_ok.php" method = "get">
 						<fieldset style = "text-align: left;">
 							<legend><strong>학과 추가</strong></legend>
 							학과이름 : <input type="text" name="dept_name"/> <br>
@@ -166,7 +166,7 @@
 				</div>
 				<br>
 				<div style = "width:300px";>
-					<form action = "Administer.php" method = "get">
+					<form action = "administer_ok.php" method = "get">
 						<fieldset style = "text-align: left;">
 							<legend><strong>학생 추가</strong></legend>
 							학생이름 : <input type="text" name="usersname"/> <br>
@@ -193,7 +193,7 @@
 					</form>
 				</div>
 				<div style = "width:300px";>
-					<form action = "Administer.php" method = "get">
+					<form action = "administer_ok.php" method = "get">
 						<fieldset style = "text-align: left;">
 							<legend><strong>교수 추가</strong></legend>
 							교수이름 : <input type="text" name="profname"/> <br>
@@ -221,7 +221,7 @@
 				</div>
 				<br>
 				<div style = "width:300px";>
-					<form action = "Administer.php" method = "get">
+					<form action = "administer_ok.php" method = "get">
 						<fieldset style = "text-align: left;">
 							<legend><strong>과목 추가</strong></legend>
 							학과이름 :

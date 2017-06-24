@@ -29,27 +29,27 @@
 		<div id="content">
 			<form action = "Next.php" method = "get">
 				<fieldset style = "text-align: center;">
-					<legend><strong><?php echo $username ?>님, 안녕하세요?</strong></legend>
-					교수명  <input type="text" name="ProfName"/>
+					<legend><strong><?php echo $username ?>, Hello!</strong></legend>
+					Professor Name <input type="text" name="ProfName"/>
 					<br>
-					과목명  <input type="text" name="title"/>
+					Subject Name  <input type="text" name="title"/>
 					<br>
-					개시연도
+					Start Year
 					<select name = "year">
-						<option value = "nosel">미입력</option>
+						<option value = "nosel">None</option>
+						<option value = "2017">2017</option>
 						<option value = "2016">2016</option>
 						<option value = "2015">2015</option>
-						<option value = "2014">2014</option>
 					</select>
 					<br>
-					개시학기
+					Start Semester
 					<select name = "semester">
-						<option value = "nosel">미입력</option>
+						<option value = "nosel">None</option>
 						<option value = "1">1</option>
 						<option value = "2">2</option>
 					</select>
 					<br>
-					수용인원
+					Accepting Student
 					<select name = "accept">
 						<option value = 40>40</option>
 						<option value = 50>50</option>
@@ -58,9 +58,9 @@
 						<option value = 80>80</option>
 					</select>
 					<br>
-					평균평점 <input type="range" name="score" min="0" max="5">
+					GPA <input type="range" name="score" min="0" max="5">
 					<br>
-					<input type="submit" name="Submit" value="검색">
+					<input type="submit" name="Submit" value="Search">
 				</fieldset>
 			</form>
 		</div>
