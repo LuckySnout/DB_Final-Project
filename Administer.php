@@ -79,8 +79,14 @@
 					$query = "select count(*) from course;";
 					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
 					$row = mysqli_fetch_array($result);
-					$student_number = $row[0] + 1;
-					$query = "insert into course values ('$next_number', '$title', '$deptname', '$credit', '$profid', $max_number, '$coursetype');";
+					$course_num = $row[0] + 1;
+					$query = "insert into course values ('$course_num', '$title', '$deptname', '$credit', '$profid', $max_number, '$coursetype');";
+					$result = mysqli_query($db, $query) or die('Query failed: '. mysqli_error());
+					$query = "select count(*) from section;";
+					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
+					$row = mysqli_fetch_array($result);
+					$section_num = $row[0] + 1;
+					$query = "insert into section values ('$course_num', '$section_num', '2', '2017');";
 					$result = mysqli_query($db, $query) or die('Query failed: '. mysqli_error());
 					echo "<script>alert('ADD SUCCESS!');document.location.href='Mypage.php';</script>";
 				}

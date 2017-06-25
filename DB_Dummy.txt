@@ -1,0 +1,182 @@
+delete from takes;
+drop table takes;
+
+delete from post;
+drop table post;
+
+delete from section;
+drop table section;
+
+delete from course;
+drop table course;
+
+delete from users;
+drop table users;
+
+delete from professor;
+drop table professor;
+
+delete from student;
+drop table student;
+
+delete from department;
+drop table department;
+
+create table department(
+	dept_name varchar(15) not null,
+	building varchar(15),
+	primary key(dept_name));
+
+create table student(
+	student_id varchar(15) not null unique,
+	student_name varchar(15) not null,
+	dept_name varchar(15) not null,
+	primary key(student_id),
+	foreign key(dept_name) references department(dept_name));
+
+create table professor(
+	professor_id varchar(15) not null unique,
+	professor_name varchar(15) not null,
+	dept_name varchar(15) not null,
+	primary key(professor_id),
+	foreign key(dept_name) references department(dept_name));
+
+create table course(
+	course_id varchar(15) not null unique,
+	title varchar(15) not null,
+	dept_name varchar(15) not null,
+	credits varchar(15),
+	professor_id varchar(15) not null,
+	max_number int not null,
+	course_type varchar(15) not null,
+	primary key(course_id),
+	foreign key(dept_name) references department(dept_name),
+	foreign key(professor_id) references professor(professor_id));
+	
+create table section(
+	course_id varchar(15) not null,
+	sec_id varchar(15) not null unique,
+	semester varchar(15) not null,
+	year varchar(15) not null,
+	primary key(course_id, sec_id, semester, year),
+	foreign key(course_id) references course(course_id));
+
+create table post(
+	post_id varchar(15) not null unique,
+	score_pro int,
+	score_ama int,
+	post_string varchar(2000),
+	primary key(post_id));
+
+create table takes(
+	student_id varchar(15) not null,
+	course_id varchar(15) not null,
+	post_id varchar(15) not null,
+	sec_id varchar(15) not null,
+	semester varchar(15) not null,
+	year varchar(15) not null,
+	grade varchar(15) not null,
+	primary key(student_id, course_id, sec_id, semester, year),
+	foreign key(post_id) references post(post_id),
+	foreign key(student_id) references student(student_id),
+	foreign key(course_id, sec_id, semester, year) references section(course_id, sec_id, semester, year));
+
+
+
+create table users(
+	user_name varchar(15) not null,
+	user_type varchar(15) not null,
+	student_id varchar(15),
+	professor_id varchar(15),
+	primary key (user_name, user_type),
+	foreign key(student_id) references student(student_id),
+	foreign key(professor_id) references professor(professor_id));
+
+insert into department values ('Comp. Sci', 'Woojung');
+insert into department values ('Business', 'Business');
+insert into department values ('Nursing', 'Nurse building');
+
+insert into student values ('1', 'Choi', 'Comp. Sci');
+insert into student values ('2', 'Lee', 'Comp. Sci');
+insert into student values ('3', 'Moon', 'Business');
+insert into professor values ('1', 'Jeong', 'Comp. Sci');
+
+insert into course values ('1', 'DB', 'Comp. Sci', '3', '1', 50, 'Major');
+insert into section values ('1', '1', '1', '2017');
+insert into post values ('1', 5, null, 'Very good!');
+insert into takes values ('1', '1', '1', '1', '1', '2017', 'A+');
+insert into users values ('Choi', 'student', '1', null);
+insert into users values ('Jeong', 'professor', null, '1');
+insert into users values ('Lee', 'student', '2', null);
+insert into users values ('Moon', 'student', '3', null);
+insert into users values('admin', 'administer', null, null);
+insert into professor values ('2', 'K.H.Lee', 'Comp. Sci');
+insert into course values ('2', 'C.A', 'Comp. Sci', '3', '2', 60, 'Major');
+insert into section values ('2', '2', '1', '2017');
+insert into post values ('2', 3, null, 'Soso');
+insert into post values ('0', null, null, null);
+insert into takes values ('1', '2', '2', '2', '1', '2017', 'A');
+
+insert into course values ('3', 'Data System', 'Comp. Sci', '3', '1', 60, 'Major');
+insert into section values ('3', '3', '1', '2017');
+insert into post values ('3', 4, null, 'Thanks');
+insert into takes values ('1', '3', '3', '3', '1', '2017', 'B+');
+insert into professor values ('3', 'S.W.Jeong', 'Comp. Sci');
+insert into professor values ('4', 'H.C.Lim', 'Comp. Sci');
+insert into professor values ('5', 'H.C.You', 'Comp. Sci');
+insert into professor values ('6', 'Kang', 'Comp. Sci');
+insert into course values ('4', 'C.A', 'Comp. Sci', '3', '3', 80, 'Major');
+insert into course values ('5', 'AI', 'Comp. Sci', '3', '4', 70, 'Major');
+insert into course values ('6', 'M.L', 'Comp. Sci', '3', '4', 70, 'Major');
+insert into course values ('7', 'OS', 'Comp. Sci', '3', '5', 80, 'Major');
+insert into course values ('8', 'D.S', 'Comp. Sci', '3', '6', 100, 'Major');
+insert into course values ('9', 'Algorithm', 'Comp. Sci', '3', '6', 80, 'Major');
+insert into section values ('4', '4', '2', '2016');
+insert into section values ('5', '5', '1', '2017');
+insert into section values ('6', '6', '2', '2016');
+insert into section values ('7', '7', '1', '2017');
+insert into section values ('8', '8', '1', '2017');
+insert into section values ('9', '9', '2', '2016');
+insert into section values ('5', '10', '1', '2016');
+insert into post values ('4', null, null, null);
+insert into post values ('5', null, null, null);
+insert into post values ('6', null, null, null);
+insert into post values ('7', null, null, null);
+insert into post values ('8', null, null, null);
+insert into post values ('9', null, null, null);
+insert into post values ('9', null, null, null);
+insert into post values ('10', null, null, null);
+insert into post values ('11', null, null, null);
+insert into post values ('12', null, null, null);
+insert into post values ('13', null, null, null);
+insert into post values ('14', null, null, null);
+insert into post values ('15', null, null, null);
+insert into post values ('16', null, null, null);
+insert into post values ('17', null, null, null);
+insert into post values ('18', null, null, null);
+insert into post values ('19', null, null, null);
+insert into post values ('20', null, null, null);
+insert into post values ('21', null, null, null);
+insert into post values ('22', null, null, null);
+insert into post values ('23', null, null, null);
+insert into post values ('24', null, null, null);
+
+insert into takes values ('1', '4', '4', '4', '2', '2016', 'A+');
+insert into takes values ('1', '5', '5', '5', '1', '2017', 'A');
+insert into takes values ('1', '6', '6', '6', '2', '2016', 'B+');
+insert into takes values ('1', '7', '7', '7', '1', '2017', 'A+');
+insert into takes values ('1', '8', '8', '8', '1', '2017', 'C+');
+insert into takes values ('1', '9', '9', '9', '2', '2016', 'C');
+insert into takes values ('2', '4', '10', '4', '2', '2016', 'A');
+insert into takes values ('2', '5', '11', '5', '1', '2017', 'F');
+insert into takes values ('3', '5', '12', '5', '1', '2017', 'A+');
+insert into takes values ('3', '6', '13', '6', '2', '2016', 'A');
+insert into takes values ('3', '5', '14', '10', '1', '2016', 'C');
+insert into takes values ('2', '1', '15', '1', '1', '2017', 'A');
+insert into takes values ('3', '1', '16', '1', '1', '2017', 'A+');
+insert into users values ('K.H.Lee','professor',null,'2');
+insert into users values ('S.W.Jeong','professor',null,'3');
+insert into users values ('H.C.Lim','professor',null,'4');
+insert into users values ('H.C.You','professor',null,'5');;
+insert into users values ('Kang','professor',null,'6');
+

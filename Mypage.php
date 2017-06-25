@@ -76,10 +76,8 @@
 						$result = mysqli_query($db,$query);
 						if(count($result)) 
 						{
-							printf("%d\n",count($result));
 							while($row = mysqli_fetch_assoc($result))
 							{
-								print("wow\n");
 								$title = $row['title'];
 								$semester = $row['semester'];
 								$year = $row['year'];
