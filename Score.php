@@ -89,7 +89,7 @@
 							if ($score1 == null) { $score1 = 0; }
 							if ($score2 == null) { $score2 = 0; }
 							echo "<tr><td>$std_name</td><td>$score1"."("."$score2".")"."</td><td>$post_str</td><td>";
-							if ($usertype == "administrator") {
+							if ($usertype == "administer") {
 								?>
 								<form action = "Score_Delete.php" method = "get">
 									<input type="hidden" name="postid" value="<?php echo $pid; ?>"/>
@@ -170,8 +170,8 @@
 					}
 				}
 				else {
-					if ($usertype == "Student") {
-						print "Cannot Evaluate";
+					if ($usertype == "student") {
+						printf ("Cannot Evaluate\n");
 					}
 				}
 			?>
