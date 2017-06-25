@@ -59,7 +59,7 @@
 		<div id='content'>
 			<table>
 				<tr>
-					<th>Professor</th><th>Subject</th><th>GPA</th><th>Available</th><th>Major GPA</th><th>Non-major GPA</th><th>Start Year</th><th>Start Semester</th><th></th>
+					<th>Professor</th><th>Subject</th><th>Credits</th><th>Available</th><th>Major GPA</th><th>Non-major GPA</th><th>Start Year</th><th>Start Semester</th><th></th>
 				</tr>
 				<br>
 				<?php
@@ -72,25 +72,25 @@
 				$score = $_GET['score'];
 				
 		
-				$query = "select distinct professor_name, title, credits, max_number, (pro_sum / cast(pro_count as float)), (ama_sum / cast(ama_count as float)), 
+				$query = "select distinct professor_name, title, credits, max_number, (pro_sum / pro_count), (ama_sum / ama_count), 
 				year, semester
 				from (select section.sec_id, sum(score_pro) as pro_sum, count(score_pro) as pro_count,
 					sum(score_ama) as ama_sum, count(score_ama) as ama_count
 					from takes join post using(post_id) join section using(sec_id)
 					where section.sec_id = takes.sec_id group by section.sec_id) as avg_score
-					join ((course join professor using(professor_id)) join takes using(course_id)) using(sec_id)
+					join (((course) join (professor) using (professor_id)) join takes using(course_id)) using(sec_id)
 				where (((pro_sum / pro_count) >= $score or (ama_sum / ama_count) >= $score) or pro_sum is null or ama_sum is null)
 				and $accept <= max_number";
-				if($year != "nosel") { $query = $query." and year like '$year'"; }
-				if($semester != "nosel") { $query = $query." and semester like '$semester'"; }
-				if($ProfName != "") { $query = $query." and professor_name like '$ProfName'"; }
-				if($title != "") { $query = $query." and title like '%$title%'"; }
-				$query = $query;
+				
+				if($year != "nosel") { $query = $query ." and year like '$year'"; }
+				if($semester != "nosel") { $query = $query ." and semester like '$semester'"; }
+				if($ProfName != "") { $query = $query ." and professor_name like '$ProfName'"; }
+				if($title != "") { $query = $query ." and title like '%$title%'"; }
+				$query = $query .";";
 				$result = mysqli_query($db,$query);
-				$row_numbers = mysqli_num_rows($result);
-				if($row_numbers) {
+				if(count($result)) {
 					//for($i=0; $i<$row_numbers; $i++) 
-					while($row=mysqli_fetch_assoc($result))
+					while($row=mysqli_fetch_array($result))
 					{
 						$professor_name = $row[0];
 						$title = $row[1];

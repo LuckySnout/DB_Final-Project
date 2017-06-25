@@ -44,10 +44,12 @@
 					$deptname = $_GET['deptname'];
 					if ($usersname == null) { echo "<script>alert('FAILED!');document.location.href='Mypage.php';</script>"; }
 					$query = "select count(*) from student;";
-					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
+					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error($db));
 					$row = mysqli_fetch_array($result);
 					$student_number = $row[0] + 1;
 					$query = "insert into student values ('$student_number', '$usersname', '$deptname');";
+					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
+					$query = "insert into users values ('$usersname','student','$student_number',NULL);";
 					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
 					echo "<script>alert('ADD SUCCESS!');document.location.href='Mypage.php';</script>";
 				}
@@ -60,6 +62,8 @@
 					$row = mysqli_fetch_array($result);
 					$student_number = $row[0] + 1;
 					$query = "insert into professor values ('$student_number', '$profname', '$deptname');";
+					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
+					$query = "insert into users values ('$profname','professor',NULL,'$student_number');";
 					$result = mysqli_query($db,$query) or die('Query failed: '. mysqli_error());
 					echo "<script>alert('ADD SUCCESS!');document.location.href='Mypage.php';</script>";
 				}
